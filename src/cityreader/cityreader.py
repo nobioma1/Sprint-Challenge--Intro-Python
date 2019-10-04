@@ -87,19 +87,40 @@ except ValueError:
 
 
 def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
+
     # within will hold the cities that fall within the specified region
+
     within = []
-    
+
     # TODO Ensure that the lat and lon values are all floats
+
+    try:
+        upper_lat = float(lat1)
+        upper_lon = float(lon1)
+        lower_lat = float(lat2)
+        lower_lon = float(lon2)
+    except ValueError:
+        print("Expected latitude, longitude to be numbers(Integer or FLoat)")
+
     # Go through each city and check to see if it falls within
     # the specified coordinates.
 
+    min_lat = min(upper_lat, lower_lat)
+    max_lat = max(upper_lat, lower_lat)
+    min_lon = min(upper_lon, lower_lon)
+    max_lon = max(upper_lon, lower_lon)
+
     for city in cities:
-        print(city.name, city.lat, city.lon)
-        if (city.lat >= lat2 and city.lat <= lat1) and (city.lon >= lon2 and city.lon <= lon1):
+        if (city.lat >= min_lat and city.lat <= max_lat) and (city.lon >= min_lon and city.lon <= max_lon):
             within.append(city)
 
     return within
 
 
-cityreader_stretch(float(lat1), float(lon1), float(lat2), float(lon2), cities)
+result = cityreader_stretch(lat1, lon1, lat2, lon2, cities)
+
+if len(result) > 0:
+    for city in result:
+        print(f"{city.name}  Lat,lon - ({city.lat}, {city.lon})")
+else:
+    print("No city found")
